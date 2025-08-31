@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Love Blog</title>
+<!-- TinyMCE Editor -->
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Global Styles */
+  body { margin:0; font-family: 'Roboto', sans-serif; background:#f9f9f9; color:#333; }
+  a { text-decoration:none; color:#ff6f61; }
+  a:hover { text-decoration:underline; }
+
+  /* Header */
+  header { background:#ff6f61; color:white; padding:30px 20px; text-align:center; }
+  header h1 { margin:0; font-size:2.5rem; }
+  header p { margin:5px 0 0; font-size:1.2rem; }
+
+  /* Navigation */
+  nav { background:#ff8577; display:flex; justify-content:center; gap:20px; padding:12px 0; }
+  nav a { color:white; font-weight:bold; }
+
+  /* Hero Section */
+  .hero { background: linear-gradient(rgba(255,111,97,0.7), rgba(255,111,97,0.7)), url('https://images.unsplash.com/photo-1508919801845-fc2ae1bc0a1d?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; color:white; text-align:center; padding:80px 20px; border-radius:0 0 20px 20px; }
+  .hero h2 { font-size:2rem; margin-bottom:10px; }
+  .hero p { font-size:1.1rem; }
+
+  /* Main Content */
+  main { display:flex; max-width:1200px; margin:30px auto; gap:30px; padding:0 15px; flex-wrap:wrap; }
+  
+  /* Posts */
+  #posts { flex:3; }
+  .post-card { background:white; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); padding:20px; margin-bottom:20px; }
+  .post-card h3 { color:#ff6f61; margin-top:0; }
+  .post-card img { max-width:100%; border-radius:8px; margin:10px 0; }
+
+  /* Sidebar */
+  .sidebar { flex:1; min-width:250px; }
+  .sidebar .ad-space, .sidebar .categories { background:white; padding:15px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); margin-bottom:20px; }
+  .sidebar .categories h4 { margin-top:0; }
+
+  /* Editor Section */
+  #editor-section { background:white; padding:20px; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); margin-bottom:20px; }
+  #editor-section input[type="text"] { width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; }
+  #editor-section input[type="file"] { margin-bottom:10px; }
+  #editor-section button { background:#ff6f61; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; }
+  #editor-section button:hover { background:#ff8577; }
+
+  /* Footer */
+  footer { background:#333; color:white; text-align:center; padding:20px 0; margin-top:30px; }
+
+  @media(max-width:900px){ main{ flex-direction:column; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>My Love Blog</h1>
+  <p>Share Your Stories, Images & Thoughts!</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#new-post">New Post</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <h2>Welcome to My Love Blog</h2>
+  <p>Write, Share and Inspire Others with Your Content</p>
+</section>
+
+<main>
+  <!-- Left Column: Posts -->
+  <div id="posts">
+    <!-- Editor Section -->
+    <div id="editor-section">
+      <h3>Create New Post</h3>
+      <input type="text" id="post-title" placeholder="Enter Post Title">
+      <input type="file" id="post-image" accept="image/*">
+      <textarea id="editor"></textarea>
+      <button onclick="addPost()">Publish Post</button>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="categories">
+      <h4>Categories</h4>
+      <ul>
+        <li><a href="#">Love Stories</a></li>
+        <li><a href="#">Life Lessons</a></li>
+        <li><a href="#">Travel</a></li>
+        <li><a href="#">Inspiration</a></li>
+      </ul>
+    </div>
+
+    <div class="ad-space">
+      <!-- Replace with Google AdSense code -->
+      Google Ad Here
+    </div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 My Love Blog. All Rights Reserved.
+</footer>
+
+<script>
+  // Initialize TinyMCE Editor
+  tinymce.init({
+    selector:'#editor',
+    plugins: 'image link media code',
+    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | image link | code',
+    height: 250
+  });
+
+  // Add Post Function
+  function addPost(){
+    const title = document.getElementById('post-title').value;
+    const content = tinymce.get('editor').getContent();
+    const imageInput = document.getElementById('post-image');
+
+    if(!title || !content){
+      alert("Please enter title and content!");
+      return;
+    }
+
+    let reader = new FileReader();
+    reader.onload = function(e){
+      const postsDiv = document.getElementById('posts');
+      const postHTML = `
+        <div class="post-card">
+          <h3>${title}</h3>
+          ${ imageInput.files[0] ? `<img src="${e.target.result}" alt="Post Image">` : '' }
+          ${content}
+          <div class="ad-space">
+            <!-- Google AdSense code here -->
+            Google Ad Here
+          </div>
+        </div>
+      `;
+      postsDiv.innerHTML = postHTML + postsDiv.innerHTML;
+
+      // Clear editor
+      document.getElementById('post-title').value = '';
+      tinymce.get('editor').setContent('');
+      imageInput.value = '';
+    }
+
+    if(imageInput.files[0]){
+      reader.readAsDataURL(imageInput.files[0]);
+    } else {
+      reader.onload({target:{result:null}});
+    }
+  }
+</script>
+
+</body>
+</html>
