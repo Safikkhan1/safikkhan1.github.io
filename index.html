@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Social Site</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    header { background: #333; color: white; padding: 15px; text-align: center; }
+    header img { height: 40px; }
+    nav { background: #444; padding: 10px; text-align: center; }
+    nav a { color: white; margin: 0 10px; text-decoration: none; }
+    .container { width: 80%; margin: auto; margin-top: 20px; }
+    .post-box { background: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    .banner { margin: 20px 0; text-align: center; }
+    .banner img { width: 100%; max-height: 120px; object-fit: cover; }
+    button { padding: 8px 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Site Logo"> 
+    <h1>My Social Platform</h1>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Upload Video</a>
+    <a href="#">Add Post</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- पोस्ट डालने का बॉक्स -->
+    <div class="post-box">
+      <h3>Create a Post</h3>
+      <textarea id="postContent" rows="4" style="width:100%;"></textarea><br><br>
+      <button onclick="addPost()">Post</button>
+    </div>
+
+    <!-- बैनर एड्स -->
+    <div class="banner">
+      <img src="banner1.jpg" alt="Company Banner">
+    </div>
+
+    <!-- यूजर पोस्ट्स -->
+    <div id="posts"></div>
+
+  </div>
+
+  <script>
+    function addPost() {
+      let content = document.getElementById("postContent").value;
+      if (content.trim() === "") return;
+
+      let postDiv = document.createElement("div");
+      postDiv.classList.add("post-box");
+      postDiv.innerHTML = `
+        <p>${content}</p>
+        <button onclick="likePost(this)">👍 Like</button> 
+        <span>0</span>
+      `;
+      document.getElementById("posts").prepend(postDiv);
+      document.getElementById("postContent").value = "";
+    }
+
+    function likePost(btn) {
+      let span = btn.nextElementSibling;
+      span.innerText = parseInt(span.innerText) + 1;
+    }
+  </script>
+</body>
+</html>
